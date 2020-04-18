@@ -1,5 +1,5 @@
 <template>
-  <v-container class="page">
+  <v-container class="page indigo--text text--darken-4">
     <v-row class="text-left ma-12">
       <v-col cols="12">
         <h2 class="display-2 mb-12">
@@ -29,7 +29,7 @@
           :placeholder="placeholder"
           :counter="counter"
           return-masked-value
-          :mask="mask"
+          v-mask="`${maskProperty}`"
         >
         </v-text-field>
 
@@ -48,7 +48,7 @@ export default {
     placeholder: '___.___.___-__',
     label: 'CPF',
     counter: 14,
-    mask: '###.###.###-##',
+    maskProperty: '###.###.###-##',
   }),
   methods: {
     changeCategory(isCPF) {
@@ -56,12 +56,12 @@ export default {
         this.placeholder = '___.___.___-__';
         this.label = 'CPF';
         this.counter = 14;
-        this.mask = '###.###.###-##';
+        this.maskProperty = '###.###.###-##';
       } else {
         this.placeholder = '__.___.___/____-__';
         this.label = 'CNPJ';
         this.counter = 18;
-        this.mask = '##.###.###/####-##';
+        this.maskProperty = '##.###.###/####-##';
       }
     },
   },
