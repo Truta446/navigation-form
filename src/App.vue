@@ -22,10 +22,12 @@ export default {
   components: {
     NavigationBar,
   },
-
   data: () => ({
     progressBar: 15,
   }),
+  mathods: {
+
+  },
 };
 </script>
 
