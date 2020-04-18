@@ -1,5 +1,6 @@
 <template>
-  <v-container class="page">
+  <v-container class="page indigo--text text--darken-4
+  ">
     <v-row class="text-left ma-12">
       <v-col cols="8">
         <h2 class="display-2 mt-12">
@@ -38,9 +39,11 @@
 export default {
   data: () => ({
     name: 'Alisson Barrison',
+  }),
+  methods: {
     nextPage: () => {
       console.log('oi');
     },
-  }),
+  },
 };
 </script>
