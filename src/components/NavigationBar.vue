@@ -18,12 +18,12 @@
     <v-spacer></v-spacer>
 
     <router-link :to="{ path: `/${index}` }">
-      <v-icon color="disabled" v-on:click="previousPage()">
+      <v-icon color="disabled" size="30" v-on:click="previousPage()" class="mr-2">
         mdi-chevron-left-circle-outline
       </v-icon>
     </router-link>
     <router-link :to="{ path: `/${index}` }">
-      <v-icon color="primary" v-on:click="nextPage()">
+      <v-icon color="primary" size="30" v-on:click="nextPage()" class="mr-6">
         mdi-chevron-right-circle-outline
       </v-icon>
     </router-link>
