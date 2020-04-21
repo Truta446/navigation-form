@@ -17,47 +17,47 @@
 
     <v-spacer></v-spacer>
 
-    <router-link :to="{ path: `/${index}` }">
-      <v-icon color="disabled" size="30" v-on:click="previousPage()" class="mr-2">
+    <v-btn
+      color="white"
+      depressed
+      small
+      :to="{ path: `/${index}` }"
+      :disabled="!buttonShowPrev"
+    >
+      <v-icon color="primary" size="30" v-on:click="previousPage()" class="mr-2">
         mdi-chevron-left-circle-outline
       </v-icon>
-    </router-link>
-    <router-link :to="{ path: `/${index}` }">
+    </v-btn>
+    <v-btn
+      small
+      color="white"
+      depressed
+      :to="{ path: `/${index}` }"
+      :disabled="!buttonShowNext"
+    >
       <v-icon color="primary" size="30" v-on:click="nextPage()" class="mr-6">
         mdi-chevron-right-circle-outline
       </v-icon>
-    </router-link>
+    </v-btn>
   </v-app-bar>
 </template>
 
 <script>
+import { mapState, mapMutations } from 'vuex';
+
 export default {
-  data: () => ({
-    index: '',
-  }),
+  computed: {
+    ...mapState({
+      index: (state) => state.index,
+      buttonShowPrev: (state) => state.buttonShowPrev,
+      buttonShowNext: (state) => state.buttonShowNext,
+    }),
+  },
   methods: {
-    previousPage() {
-      if (this.index === '') {
-        return;
-      }
-
-      this.index--;
-
-      if (this.index === 1) {
-        this.index = '';
-      }
-    },
-    nextPage() {
-      if (this.index === '') {
-        this.index = 1;
-      }
-
-      this.index++;
-
-      if (this.index === 7) {
-        this.index = 6;
-      }
-    },
+    ...mapMutations([
+      'previousPage',
+      'nextPage',
+    ]),
   },
 };
 </script>
