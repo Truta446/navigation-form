@@ -1,10 +1,9 @@
 <template>
-  <v-container class="page indigo--text text--darken-4
-  ">
+  <v-container class="page indigo--text text--darken-4">
     <v-row class="text-left ma-12">
       <v-col cols="8">
         <h2 class="display-2 mt-12">
-          Olá <span class="font-weight-bold">{{ name }}</span>,
+          Olá <span class="font-weight-bold">{{ personalName }}</span>,
         </h2>
 
         <h2 class="display-2 mb-12">
@@ -18,7 +17,7 @@
 
         <br><br><br><br>
 
-        <v-btn color="primary" v-on:click="nextPage()">Começar</v-btn>
+        <v-btn color="primary" v-on:click="nextPage()" :to="{ path: `/2` }">Começar</v-btn>
       </v-col>
 
       <v-col cols="4" class="mt-12">
@@ -36,14 +35,18 @@
 </template>
 
 <script>
+import { mapMutations, mapGetters } from 'vuex';
+
 export default {
-  data: () => ({
-    name: 'Alisson Barrison',
-  }),
+  computed: {
+    ...mapGetters([
+      'personalName',
+    ]),
+  },
   methods: {
-    nextPage: () => {
-      console.log('oi');
-    },
+    ...mapMutations([
+      'nextPage',
+    ]),
   },
 };
 </script>
