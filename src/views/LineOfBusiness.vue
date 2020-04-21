@@ -11,17 +11,31 @@
           <form>
             <ValidationProvider v-slot="{ errors }" name="Ramo de Atuação" rules="required">
               <v-select
-                v-model="select"
-                :items="lineOfBusiness"
+                v-model="lineOfBusiness"
+                :items="items"
                 :error-messages="errors"
+                :hint="items.descricao"
+                item-text="nome"
+                item-value="id"
                 label="Ramo de Atuação"
+                v-on:change="changeStatus(4)"
+                persistent-hint
+                single-line
+                return-object
                 required
               ></v-select>
             </ValidationProvider>
 
             <br><br><br><br>
 
-            <v-btn color="primary" v-on:click="nextPage()">Avançar</v-btn>
+            <v-btn
+              color="primary"
+              v-on:click="validateInformation(); nextPage()"
+              :to="{ path: `/5` }"
+              :disabled="!releaseButton4"
+            >
+              Avançar
+            </v-btn>
           </form>
         </ValidationObserver>
       </v-col>
@@ -37,6 +51,7 @@ import {
   ValidationProvider,
   setInteractionMode,
 } from 'vee-validate';
+import { mapMutations, mapGetters } from 'vuex';
 
 setInteractionMode('eager');
 
@@ -51,12 +66,41 @@ export default {
     ValidationObserver,
   },
   data: () => ({
-    lineOfBusiness: [],
+    items: [
+      {
+        id_atividade_empresa: 25,
+        nome: 'Academias e Locais para pratica de Esporte',
+        descricao: 'Academias e Locais para pratica de Esporte',
+      },
+      {
+        id_atividade_empresa: 65,
+        nome: 'Agro Veterinária',
+        descricao: 'Loja que atende ao mercado consumidor do setor veterinário (grandes animais) e pragas urbanas',
+      },
+      {
+        id_atividade_empresa: 60,
+        nome: 'Artesanato',
+        descricao: 'Venda de produtos, aviamentos, cursos, etc',
+      },
+    ],
   }),
+  computed: {
+    lineOfBusiness: {
+      get() { return this.$store.getters.lineOfBusiness; },
+      set(newValue) { return this.$store.dispatch('setLineOfBusiness', newValue); },
+    },
+    ...mapGetters([
+      'releaseButton4',
+    ]),
+  },
   methods: {
-    nextPage() {
+    validateInformation() {
       this.$refs.observer.validate();
     },
+    ...mapMutations([
+      'nextPage',
+      'changeStatus',
+    ]),
   },
 };
 </script>
