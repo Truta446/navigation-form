@@ -12,8 +12,8 @@
             <ValidationProvider v-slot="{ errors }" name="Nome fantasia" rules="required|max:100">
               <v-text-field
                 v-model="fantasyName"
-                :counter="100"
                 :error-messages="errors"
+                v-on:keyup="changeStatus(3)"
                 label="Nome fantasia"
                 required
               ></v-text-field>
@@ -21,8 +21,8 @@
             <ValidationProvider v-slot="{ errors }" name="Razão Social" rules="required|max:100">
               <v-text-field
                 v-model="companyName"
-                :counter="100"
                 :error-messages="errors"
+                v-on:keyup="changeStatus(3)"
                 label="Razão Social"
                 required
               ></v-text-field>
@@ -31,7 +31,6 @@
               <ValidationProvider v-slot="{ errors }" name="Telefone" rules="required|max:14">
                 <v-text-field
                   v-model="phone"
-                  :counter="14"
                   :error-messages="errors"
                   label="Telefone"
                   v-mask="'(##) ####-####'"
@@ -44,7 +43,6 @@
               <ValidationProvider v-slot="{ errors }" name="Celular" rules="required|max:16">
                 <v-text-field
                   v-model="cellPhone"
-                  :counter="16"
                   :error-messages="errors"
                   label="Celular"
                   v-mask="'(##) # ####-####'"
@@ -58,8 +56,8 @@
             <ValidationProvider v-slot="{ errors }" name="E-mail" rules="required|email|max:100">
               <v-text-field
                 v-model="email"
-                :counter="100"
                 :error-messages="errors"
+                v-on:keyup="changeStatus(3)"
                 label="E-mail"
                 required
               ></v-text-field>
@@ -67,7 +65,14 @@
 
             <br><br>
 
-            <v-btn color="primary" v-on:click="nextPage()">Avançar</v-btn>
+            <v-btn
+              color="primary"
+              v-on:click="validateInformation(); nextPage()"
+              :to="{ path: `/4` }"
+              :disabled="!releaseButton3"
+            >
+              Avançar
+            </v-btn>
           </form>
         </ValidationObserver>
       </v-col>
@@ -83,6 +88,7 @@ import {
   ValidationProvider,
   setInteractionMode,
 } from 'vee-validate';
+import { mapMutations, mapGetters } from 'vuex';
 
 setInteractionMode('eager');
 
@@ -106,17 +112,39 @@ export default {
     ValidationProvider,
     ValidationObserver,
   },
-  data: () => ({
-    fantasyName: '',
-    companyName: '',
-    phone: '',
-    cellPhone: '',
-    email: '',
-  }),
+  computed: {
+    fantasyName: {
+      get() { return this.$store.getters.fantasyName; },
+      set(newValue) { return this.$store.dispatch('setFantasyName', newValue); },
+    },
+    companyName: {
+      get() { return this.$store.getters.companyName; },
+      set(newValue) { return this.$store.dispatch('setCompanyName', newValue); },
+    },
+    phone: {
+      get() { return this.$store.getters.phone; },
+      set(newValue) { return this.$store.dispatch('setPhone', newValue); },
+    },
+    cellPhone: {
+      get() { return this.$store.getters.cellPhone; },
+      set(newValue) { return this.$store.dispatch('setCellPhone', newValue); },
+    },
+    email: {
+      get() { return this.$store.getters.email; },
+      set(newValue) { return this.$store.dispatch('setEmail', newValue); },
+    },
+    ...mapGetters([
+      'releaseButton3',
+    ]),
+  },
   methods: {
-    nextPage() {
+    validateInformation() {
       this.$refs.observer.validate();
     },
+    ...mapMutations([
+      'nextPage',
+      'changeStatus',
+    ]),
   },
 };
 </script>
