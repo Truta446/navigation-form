@@ -3,7 +3,7 @@
     <v-row class="text-left ma-12">
       <v-col cols="8">
         <h2 class="display-2 mt-12">
-          Parabéns, <span class="font-weight-bold">{{ name }}</span>!
+          Parabéns, <span class="font-weight-bold">{{ personalName }}</span>!
         </h2>
 
         <h2 class="display-2 mt-12">
@@ -28,7 +28,7 @@
         </p>
 
         <p class="headline mt-12">
-          <span class="font-weight-bold">{{ email }}</span>
+          <span class="font-weight-bold">{{ personalEmail }}</span>
         </p>
 
         <br><br><br><br>
@@ -43,10 +43,14 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
-  data: () => ({
-    name: 'Alisson Barison',
-    email: '',
-  }),
+  computed: {
+    ...mapGetters([
+      'personalName',
+      'personalEmail',
+    ]),
+  },
 };
 </script>

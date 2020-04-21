@@ -13,12 +13,11 @@
               <ValidationProvider v-slot="{ errors }" name="CEP" rules="required|max:9">
                 <v-text-field
                   v-model="cep"
-                  :counter="9"
                   :error-messages="errors"
                   label="CEP"
                   v-mask="'#####-###'"
                   placeholder="_____-___"
-                  v-on:keyup="sendViaCep()"
+                  v-on:keyup="sendViaCep(); changeStatus(5)"
                   required
                 ></v-text-field>
               </ValidationProvider>
@@ -30,13 +29,13 @@
               {{ street }},
               <v-flex sm3>
                 <v-text-field
-                  v-model="number"
+                  :value="number"
                   placeholder="Número"
                 ></v-text-field>
               </v-flex>
               <v-flex sm5>
                 <v-text-field
-                  v-model="compl"
+                  :value="compl"
                   placeholder="Complemento"
                 ></v-text-field>
               </v-flex>, {{ district }},
@@ -45,7 +44,14 @@
 
             <br><br>
 
-            <v-btn color="primary" v-on:click="nextPage()">Concluir Cadastro</v-btn>
+            <v-btn
+              color="primary"
+              v-on:click="validateInformation(); nextPage()"
+              :to="{ path: `/6` }"
+              :disabled="!releaseButton5"
+            >
+              Concluir Cadastro
+            </v-btn>
           </form>
         </ValidationObserver>
       </v-col>
@@ -65,7 +71,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 import { required, max } from 'vee-validate/dist/rules';
 import {
   extend,
@@ -73,6 +78,7 @@ import {
   ValidationProvider,
   setInteractionMode,
 } from 'vee-validate';
+import { mapGetters, mapMutations } from 'vuex';
 
 setInteractionMode('eager');
 
@@ -91,34 +97,36 @@ export default {
     ValidationProvider,
     ValidationObserver,
   },
-  data: () => ({
-    cep: [],
-    street: '',
-    number: '',
-    compl: '',
-    district: '',
-    city: '',
-    state: '',
-  }),
+  computed: {
+    cep: {
+      get() { return this.$store.getters.cep; },
+      set(newValue) { return this.$store.dispatch('setCep', newValue); },
+    },
+    number: {
+      get() { return this.$store.getters.number; },
+      set(newValue) { return this.$store.dispatch('setNumber ', newValue); },
+    },
+    compl: {
+      get() { return this.$store.getters.compl; },
+      set(newValue) { return this.$store.dispatch('setCompl', newValue); },
+    },
+    ...mapGetters([
+      'releaseButton5',
+      'street',
+      'district',
+      'city',
+      'state',
+    ]),
+  },
   methods: {
-    nextPage() {
+    validateInformation() {
       this.$refs.observer.validate();
     },
-    async sendViaCep() {
-      if (this.cep.length !== 9) return;
-
-      try {
-        const { cep } = this;
-        const { data } = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
-
-        this.street = data.logradouro;
-        this.district = data.bairro;
-        this.city = data.localidade;
-        this.state = data.uf;
-      } catch (err) {
-        console.log(err);
-      }
-    },
+    ...mapMutations([
+      'nextPage',
+      'changeStatus',
+      'sendViaCep',
+    ]),
   },
 };
 </script>
