@@ -6,8 +6,8 @@
       <v-progress-linear :value="progressBar" color="primary"></v-progress-linear>
       <transition
         name="router-anim"
-        enter-active-class="animated fadeInRight"
-        leave-active-class="animated fadeOutLeft"
+        :enter-active-class="enterClass"
+        :leave-active-class="leaveClass"
       >
         <router-view class="ma-12"/>
       </transition>
@@ -16,17 +16,19 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import NavigationBar from './components/NavigationBar.vue';
 
 export default {
   components: {
     NavigationBar,
   },
-  data: () => ({
-    progressBar: 15,
-  }),
-  mathods: {
-
+  computed: {
+    ...mapGetters([
+      'progressBar',
+      'enterClass',
+      'leaveClass',
+    ]),
   },
 };
 </script>
