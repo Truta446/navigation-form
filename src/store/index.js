@@ -72,24 +72,24 @@ export default new Vuex.Store({
       state.enterClass = 'animated fadeInRight';
       state.leaveClass = 'animated fadeOutLeft';
 
-      state.index++;
-
-      switch (state.index) {
+      switch (state.index + 1) {
         case 2:
-          if (state.releaseButton2) return;
+          if (!state.releaseButton2) return;
           break;
         case 3:
-          if (state.releaseButton3) return;
+          if (!state.releaseButton3) return;
           break;
         case 4:
-          if (state.releaseButton4) return;
+          if (!state.releaseButton4) return;
           break;
         case 5:
-          if (state.releaseButton5) return;
+          if (!state.releaseButton5) return;
           break;
         default:
           break;
       }
+
+      state.index++;
 
       state.progressBar = (state.index - 1) * 20;
 
