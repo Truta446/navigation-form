@@ -15,7 +15,6 @@
           uso inteligente das informações através de alta tecnologia.
         </h3>
 
-        <br><br><br><br>
 
         <v-btn color="primary" v-on:click="nextPage()">Começar</v-btn>
       </v-col>

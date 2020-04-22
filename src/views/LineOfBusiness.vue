@@ -26,7 +26,6 @@
               ></v-select>
             </ValidationProvider>
 
-            <br><br><br><br>
 
             <v-btn
               color="primary"

@@ -38,7 +38,6 @@
               ></v-text-field>
             </ValidationProvider>
 
-            <br><br><br><br>
 
             <v-btn
               color="primary"

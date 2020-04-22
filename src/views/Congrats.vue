@@ -31,7 +31,6 @@
           <span class="font-weight-bold">{{ personalEmail }}</span>
         </p>
 
-        <br><br><br><br>
 
         <p class="caption mt-12 red--text">
           Não esqueça de verificar sua caixa de spam!

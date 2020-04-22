@@ -23,7 +23,6 @@
               </ValidationProvider>
             </v-flex>
 
-            <br>
 
             <p class="headline mb-12">
               {{ street }},
@@ -42,7 +41,6 @@
               {{ city }}, {{ state }}
             </p>
 
-            <br><br>
 
             <v-btn
               color="primary"
