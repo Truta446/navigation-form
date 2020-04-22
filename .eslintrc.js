@@ -15,8 +15,8 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
     'no-plusplus': 'off',
     'prefer-destructuring': ['error', {
-      'array': false,
-      'object': true,
+      array: false,
+      object: true,
     }],
   },
 };
