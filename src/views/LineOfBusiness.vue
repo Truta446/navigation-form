@@ -30,8 +30,7 @@
 
             <v-btn
               color="primary"
-              v-on:click="validateInformation(); nextPage()"
-              :to="{ path: `/5` }"
+              v-on:click="validateInformation(); nextPage();"
               :disabled="!releaseButton4"
             >
               Avançar

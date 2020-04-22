@@ -29,13 +29,13 @@
               {{ street }},
               <v-flex sm3>
                 <v-text-field
-                  :value="number"
+                  v-model="number"
                   placeholder="Número"
                 ></v-text-field>
               </v-flex>
               <v-flex sm5>
                 <v-text-field
-                  :value="compl"
+                  v-model="compl"
                   placeholder="Complemento"
                 ></v-text-field>
               </v-flex>, {{ district }},
@@ -46,8 +46,7 @@
 
             <v-btn
               color="primary"
-              v-on:click="validateInformation(); nextPage()"
-              :to="{ path: `/6` }"
+              v-on:click="validateInformation(); nextPage();"
               :disabled="!releaseButton5"
             >
               Concluir Cadastro
@@ -104,7 +103,7 @@ export default {
     },
     number: {
       get() { return this.$store.getters.number; },
-      set(newValue) { return this.$store.dispatch('setNumber ', newValue); },
+      set(newValue) { return this.$store.dispatch('setNumber', newValue); },
     },
     compl: {
       get() { return this.$store.getters.compl; },

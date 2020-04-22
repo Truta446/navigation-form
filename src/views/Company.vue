@@ -15,7 +15,6 @@
                 :error-messages="errors"
                 v-on:keyup="changeStatus(3)"
                 label="Nome fantasia"
-                required
               ></v-text-field>
             </ValidationProvider>
             <ValidationProvider v-slot="{ errors }" name="Razão Social" rules="required|max:100">
@@ -59,7 +58,6 @@
                 :error-messages="errors"
                 v-on:keyup="changeStatus(3)"
                 label="E-mail"
-                required
               ></v-text-field>
             </ValidationProvider>
 
@@ -67,8 +65,7 @@
 
             <v-btn
               color="primary"
-              v-on:click="validateInformation(); nextPage()"
-              :to="{ path: `/4` }"
+              v-on:click="validateInformation(); nextPage();"
               :disabled="!releaseButton3"
             >
               Avançar

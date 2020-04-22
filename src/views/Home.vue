@@ -17,7 +17,7 @@
 
         <br><br><br><br>
 
-        <v-btn color="primary" v-on:click="nextPage()" :to="{ path: `/2` }">Começar</v-btn>
+        <v-btn color="primary" v-on:click="nextPage()">Começar</v-btn>
       </v-col>
 
       <v-col cols="4" class="mt-12">
