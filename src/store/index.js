@@ -2,6 +2,9 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios';
 import createPersistedState from 'vuex-persistedstate';
+import { cpf, cnpj } from 'cpf-cnpj-validator';
+import validEmail from '@secretsofsume/valid-email';
+import router from '../router';
 
 Vue.use(Vuex);
 
@@ -61,6 +64,8 @@ export default new Vuex.Store({
       if (state.index === 1) {
         state.index = '';
       }
+
+      router.push(`/${state.index}`);
     },
     nextPage: (state) => {
       if (state.index === 6) return;
@@ -69,10 +74,7 @@ export default new Vuex.Store({
         state.index = 1;
       }
 
-      state.enterClass = 'animated fadeInRight';
-      state.leaveClass = 'animated fadeOutLeft';
-
-      switch (state.index + 1) {
+      switch (state.index) {
         case 2:
           if (!state.releaseButton2) return;
           break;
@@ -91,19 +93,43 @@ export default new Vuex.Store({
 
       state.index++;
 
+      state.enterClass = 'animated fadeInRight';
+      state.leaveClass = 'animated fadeOutLeft';
+
       state.progressBar = (state.index - 1) * 20;
 
       state.buttonShowPrev = state.index !== 1;
       state.buttonShowNext = state.index !== 6;
+
+      router.push(`/${state.index}`);
     },
     changeStatus: (state, page) => {
       switch (page) {
         case 2:
           if (state.company.info.cpfOrCnpj === '') return;
+
+          if (state.label === 'CPF') {
+            if (!cpf.isValid(state.company.info.cpfOrCnpj)) {
+              state.releaseButton2 = false;
+              return;
+            }
+          } else if (!cnpj.isValid(state.company.info.cpfOrCnpj)) {
+            state.releaseButton2 = false;
+            return;
+          }
+
           state.releaseButton2 = true;
           break;
         case 3:
-          if (state.company.info.fantasyName === '' || state.company.info.companyName === '' || state.company.info.email === '') return;
+          if (state.company.info.fantasyName === ''
+            || state.company.info.companyName === ''
+            || state.company.info.email === ''
+            || !validEmail(state.company.info.email)
+          ) {
+            state.releaseButton3 = false;
+            return;
+          }
+
           state.releaseButton3 = true;
           break;
         case 4:
@@ -124,12 +150,22 @@ export default new Vuex.Store({
       const CNPJ = state.company.info.cpfOrCnpj.replace(/[^\d]+/g, '');
 
       try {
-        const { data } = await axios.get(`https://www.receitaws.com.br/v1/cnpj/${CNPJ}`);
+        const { data } = await axios.get(`https://cors-anywhere.herokuapp.com/https://www.receitaws.com.br/v1/cnpj/${CNPJ}`);
 
+        state.company.address.cep = data.cep;
+        state.company.address.street = data.logradouro;
+        state.company.address.district = data.bairro;
+        state.company.address.city = data.municipio;
+        state.company.address.state = data.uf;
+        state.company.address.number = data.numero;
+        state.company.address.compl = data.complemento;
         state.company.info.fantasyName = data.fantasia;
         state.company.info.companyName = data.nome;
         state.company.info.phone = data.telefone.split('/')[0];
         state.company.info.email = data.email;
+
+        state.releaseButton3 = true;
+        state.releaseButton5 = true;
       } catch (err) {
         console.log(err);
       }
