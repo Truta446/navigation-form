@@ -26,7 +26,7 @@
 
         <ValidationObserver ref="observer">
           <form>
-            <ValidationProvider v-slot="{ errors }" name="Razão Social" rules="required|max:100">
+            <ValidationProvider v-slot="{ errors }" :name="label" rules="required|max:18">
               <v-text-field
                 :label="label"
                 :placeholder="placeholder"
@@ -42,8 +42,7 @@
 
             <v-btn
               color="primary"
-              v-on:click="validateInformation(); sendReceitaWS(); nextPage()"
-              :to="{ path: `/3` }"
+              v-on:click="validateInformation(); sendReceitaWS(); nextPage();"
               :disabled="!releaseButton2"
             >
               Avançar
