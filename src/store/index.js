@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios';
+import moment from 'moment';
 import createPersistedState from 'vuex-persistedstate';
 import { cpf, cnpj } from 'cpf-cnpj-validator';
 import validEmail from '@secretsofsume/valid-email';
@@ -24,6 +25,14 @@ export default new Vuex.Store({
     label: 'CPF',
     maskProperty: '###.###.###-##',
     progressBar: 0,
+    pricesPerPeriod: ['78,00', '149,00', '199,00'],
+    activeTabPeriod: '',
+    prices: {
+      mensal: ['78,00', '149,00', '199,00'],
+      trimestral: ['222,30', '424,65', '567,15'],
+      semestral: ['421,20', '804,60', '1074,60'],
+      anual: ['748,80', '1430,40', '1910,40'],
+    },
     personalName: 'Alisson Barison',
     personalEmail: 'reidogado@reidogado.com',
     company: {
@@ -45,6 +54,19 @@ export default new Vuex.Store({
         city: '',
         state: '',
       },
+      paymentPlan: {
+        plan: 'Completo',
+        price: '199,00',
+        period: 'mês',
+        formOfPayment: 'Cartão de Crédito',
+        cardholder: '',
+        cardNumber: '',
+        cardExpiringDate: {
+          month: moment().format('MM'),
+          year: moment().format('YY'),
+        },
+        cvv: null,
+      },
     },
   },
   mutations: {
@@ -56,10 +78,10 @@ export default new Vuex.Store({
 
       state.index--;
 
-      state.progressBar = (state.index - 1) * 20;
+      state.progressBar = (state.index - 1) * 16.66;
 
       state.buttonShowPrev = state.index !== 1;
-      state.buttonShowNext = state.index !== 6;
+      state.buttonShowNext = state.index !== 7;
 
       if (state.index === 1) {
         state.index = '';
@@ -68,7 +90,7 @@ export default new Vuex.Store({
       router.push(`/${state.index}`);
     },
     nextPage: (state) => {
-      if (state.index === 6) return;
+      if (state.index === 7) return;
 
       if (state.index === '') {
         state.index = 1;
@@ -96,10 +118,10 @@ export default new Vuex.Store({
       state.enterClass = 'animated fadeInRight';
       state.leaveClass = 'animated fadeOutLeft';
 
-      state.progressBar = (state.index - 1) * 20;
+      state.progressBar = (state.index - 1) * 16.66;
 
       state.buttonShowPrev = state.index !== 1;
-      state.buttonShowNext = state.index !== 6;
+      state.buttonShowNext = state.index !== 7;
 
       router.push(`/${state.index}`);
     },
@@ -196,6 +218,27 @@ export default new Vuex.Store({
         state.maskProperty = '##.###.###/####-##';
       }
     },
+    choosenPeriod(state, n) {
+      switch (n) {
+        case 1:
+          state.pricesPerPeriod = state.prices.mensal;
+          break;
+        case 2:
+          state.pricesPerPeriod = state.prices.trimestral;
+          break;
+        case 3:
+          state.pricesPerPeriod = state.prices.semestral;
+          break;
+        case 4:
+          state.pricesPerPeriod = state.prices.anual;
+          break;
+        default:
+          break;
+      }
+    },
+    changePlan() {
+      router.push('/changePlan');
+    },
     SET_CPF_OR_CNPJ: (state, newValue) => {
       state.company.info.cpfOrCnpj = newValue;
     },
@@ -225,6 +268,9 @@ export default new Vuex.Store({
     },
     SET_COMPL: (state, newValue) => {
       state.company.address.compl = newValue;
+    },
+    SET_ACTIVATE_TAB_PERIOD: (state, newValue) => {
+      state.activeTabPeriod = newValue;
     },
   },
   actions: {
@@ -268,6 +314,10 @@ export default new Vuex.Store({
       commit('SET_COMPL', newValue);
       return state.company.address.compl;
     },
+    setActiveTabPeriod: ({ commit, state }, newValue) => {
+      commit('SET_ACTIVATE_TAB_PERIOD', newValue);
+      return state.activeTabPeriod;
+    },
   },
   getters: {
     index: (state) => state.index,
@@ -284,6 +334,8 @@ export default new Vuex.Store({
     label: (state) => state.label,
     maskProperty: (state) => state.maskProperty,
     progressBar: (state) => state.progressBar,
+    pricesPerPeriod: (state) => state.pricesPerPeriod,
+    activeTabPeriod: (state) => state.activeTabPeriod,
     personalName: (state) => state.personalName,
     personalEmail: (state) => state.personalEmail,
     cpfOrCnpj: (state) => state.company.info.cpfOrCnpj,
@@ -300,6 +352,14 @@ export default new Vuex.Store({
     district: (state) => state.company.address.district,
     city: (state) => state.company.address.city,
     state: (state) => state.company.address.state,
+    plan: (state) => state.company.paymentPlan.plan,
+    price: (state) => state.company.paymentPlan.price,
+    period: (state) => state.company.paymentPlan.period,
+    formOfPayment: (state) => state.company.paymentPlan.formOfPayment,
+    cardholder: (state) => state.company.paymentPlan.cardholder,
+    cardNumber: (state) => state.company.paymentPlan.cardNumber,
+    cardExpiringDate: (state) => state.company.paymentPlan.cardExpiringDate,
+    cvv: (state) => state.company.paymentPlan.cvv,
   },
   plugins: [createPersistedState()],
 });
