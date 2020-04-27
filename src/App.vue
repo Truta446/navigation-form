@@ -36,6 +36,5 @@ export default {
 <style>
   .page {
     position: fixed;
-    width: inherit;
   }
 </style>

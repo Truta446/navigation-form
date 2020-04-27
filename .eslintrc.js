@@ -18,5 +18,6 @@ module.exports = {
       array: false,
       object: true,
     }],
+    "vue/no-use-v-if-with-v-for": "off"
   },
 };
